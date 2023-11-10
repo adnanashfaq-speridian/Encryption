@@ -34,7 +34,7 @@ public with sharing class EncryptionUtil {
         return mapOfKeyAndData; 
     } 
 
-    @AuraEnabled
+    @AuraEnabled(cacheable=true)
     public static Map<string, string> processDecryption(Map<string, string> mapOfEncryptedData, String key){ 
 
         String decryptedData; 
