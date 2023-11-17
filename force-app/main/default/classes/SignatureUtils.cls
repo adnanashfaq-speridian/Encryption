@@ -19,15 +19,15 @@ public without sharing class SignatureUtils {
  
     //Save file as Attachment
  	@testVisible
-    private static void saveAttachment(string relatedId, string data){
+    private static void saveAttachment(Id relatedId, string data){
         Attachment att = new Attachment();
-        att.Name = 'Singed-'+System.now().getTime()+'.png';
+        att.Name = 'Signed-'+System.now().getTime()+'.png';
         att.Body = EncodingUtil.base64Decode(data);
         att.ContentType = 'image/png';
         att.ParentId = relatedId;
- 
+        System.debug('arelatedId'+relatedId); 
         insert att;
- 
+        System.debug('att .id '+att.id); 
     }
 	
     @testVisible
