@@ -47,10 +47,28 @@ export default class CryptoTest extends LightningElement {
         this.encryptedDataArrayObj = result;
         for (var key in result) {
           if(key === 'Key'){
-            this.encryptionKey = this.getValueFromObj(key);            
-          }          
+            this.encryptionKey = this.getValueFromObj(key);    
+            localStorage.setItem("Key", this.getValueFromObj(key));        
+          }   
+          /*if(key === 'bankRedirectUrl'){
+            localStorage.setItem("bankRedirectUrl", this.getValueFromObj(bankRedirectUrl));          
+          }   
+          if(key === 'tokenId'){
+            localStorage.setItem("tokenId", this.getValueFromObj(tokenId));          
+          }      */   
         }
-        console.log('this.encryptionKey == '+this.encryptionKey);
+          
+        /*localStorage.setItem("tokenId", this.getValueFromObj(tokenId));        
+        localStorage.setItem("bankCode", this.getValueFromObj(bankCode));        
+        localStorage.setItem("availableBalance", this.getValueFromObj(availableBalance));        
+        localStorage.setItem("creditSegmentCode", this.getValueFromObj(creditSegmentCode));        
+        localStorage.setItem("creditSegmentType", this.getValueFromObj(creditSegmentType));        
+        localStorage.setItem("applicationID", this.getValueFromObj(applicationID));        
+        localStorage.setItem("companyCode", this.getValueFromObj(companyCode));       */ 
+
+        console.log('localStorage.getAA == '+localStorage.getItem("Key"));
+        console.log('this.keeyyyy == '+this.encryptionKey);
+        console.log('this.encryptedDataArrayObjectttt == '+JSON.stringify(this.encryptedDataArrayObj));
       })
       .catch((error) => {
         console.log('in error == '+JSON.stringify(error));

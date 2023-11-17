@@ -12,25 +12,17 @@ public with sharing class EncryptionUtil {
 
     @AuraEnabled(cacheable=true)
     public static map<string, string> processEncryption( map<string, string> encryptedDataArray){ 
-        //system.debug('json== '+json);        
-        //map<string, string> encryptedDataArray = (map<string, string>)json;
         
         Map<string, string> mapOfKeyAndData = new map<string, string>();
-        system.debug('encryptedDataArray == '+encryptedDataArray); 
         map<string, blob> mapOfKeywithBlob = getKey();
-        system.debug('cryptoKey -- '+EncodingUtil.base64Encode(cryptoKey));
         mapOfKeyAndData.put('Key', EncodingUtil.base64Encode(cryptoKey));
         for(string s : encryptedDataArray.keyset()){
           
-            //encryptKey.put(recId, EncodingUtil.base64Encode(cryptoKey)); 
             Blob data = Blob.valueOf(encryptedDataArray.get(s)); 
             Blob encryptedData = Crypto.encryptWithManagedIV('AES128', cryptoKey, data ); 
             string b64Data = EncodingUtil.base64Encode (encryptedData);            
-            
             mapOfKeyAndData.put(s,b64Data);            
         }        
-        
-        system.debug('mapOfKeyAndData == '+mapOfKeyAndData); 
         return mapOfKeyAndData; 
     } 
 
@@ -42,9 +34,7 @@ public with sharing class EncryptionUtil {
         for(string encryptedValue : mapOfEncryptedData.keyset()){    
 
             Blob data = EncodingUtil.base64Decode(mapOfEncryptedData.get(encryptedValue)); 
-            
             Blob privateKey = EncodingUtil.base64Decode(key);  
-            
             try{ 
                 Blob dataToDecrypt = Crypto.decryptWithManagedIV ('AES128', privateKey, data); 
                 decryptedData = dataToDecrypt.toString(); 
@@ -54,7 +44,6 @@ public with sharing class EncryptionUtil {
                 expMsg = e.getMessage();  
             }
         }
-        system.debug('mapOfDecryptedData -- '+mapOfDecryptedData);
         return (string.isEmpty(expMsg) ?  mapOfDecryptedData :  null);  
     } 
 }
