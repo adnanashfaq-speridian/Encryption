@@ -18,8 +18,8 @@ public without sharing class SignatureUtils {
     }
  
     //Save file as Attachment
- 	@testVisible
-    private static void saveAttachment(Id relatedId, string data){
+    @AuraEnabled
+    public static void saveAttachment(Id relatedId, string data){
         Attachment att = new Attachment();
         att.Name = 'Signed-'+System.now().getTime()+'.png';
         att.Body = EncodingUtil.base64Decode(data);

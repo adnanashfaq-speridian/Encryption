@@ -1,4 +1,4 @@
-import { LightningElement,api,track } from 'lwc';
+import { LightningElement, api, track , wire } from 'lwc';
 import saveSignature from '@salesforce/apex/SignatureUtils.saveSignature';
 let saveType = 'SFFile'; //'SFFile' 'Attachment'
 let sCanvas , context; //canvas and it context 2d
@@ -7,10 +7,10 @@ let currPos = {x:0,y:0};
 let prePos = {x:0,y:0};
 
 export default class SignaturePanel extends LightningElement {
-    @api recId;
+    @api recordId;
+    @api objectApiName;
     @api noData = false;
     @track ongoingTouches = [];
-
 
     constructor(){
         super();
@@ -19,7 +19,7 @@ export default class SignaturePanel extends LightningElement {
         this.template.addEventListener('mousemove',this.handleMousemove.bind(this));
         this.template.addEventListener('mouseup',this.handleMouseup.bind(this));
         this.template.addEventListener('mouseout',this.handleMouseend.bind(this));
-
+        
         this.template.addEventListener("touchstart", function (e) {
             e.preventDefault();
             var touch = e.touches[0];
@@ -56,8 +56,8 @@ export default class SignaturePanel extends LightningElement {
     }
 
     @api
-    handleSaveSignature(recId){
-         
+    handleSaveSignature(){
+        console.log('recordId ==== '+this.recordId);
         context.globalCompositeOperation  = "destination-over";
         context.fillStyle  = "#FFF";
         context.fillRect(0,0,sCanvas.width,sCanvas.height);
@@ -65,7 +65,7 @@ export default class SignaturePanel extends LightningElement {
         let imageURL = sCanvas.toDataURL('image/png');
         let imageData = imageURL.replace(/^data:image\/(png|jpg);base64,/, "");
 
-        saveSignature({relatedId:recId,data:imageData,type:saveType})
+        saveSignature({relatedId: this.recordId,data:imageData,type:saveType})
             .then(result =>{
                 this.handleClear();                 
             })
